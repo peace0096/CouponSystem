@@ -1,10 +1,16 @@
+use core::f32;
 use std::sync::Arc;
 
 use std::sync::Mutex;
 
+pub trait Entity {
+    fn get_id(&self) -> u64;
+}
+
 #[derive(Debug)]
 pub struct Coupon {
     coupon_id: u64,
+    category: u64,
     percent: f32
 }
 
@@ -14,16 +20,21 @@ pub struct CouponBox {
     percent: f32
 }
 
+impl Entity for Coupon {
+    fn get_id(&self) -> u64 {
+        self.coupon_id
+    }
+}
+
 impl Coupon {
-    pub fn new(id:u64, percent:f32) -> Self{
+    
+
+    pub fn new(id:u64, category:u64, percent:f32) -> Self{
         Self {
             coupon_id: id,
+            category,
             percent
         }
-    }
-
-    pub fn get_id(&self) -> u64 {
-        self.coupon_id
     }
 
     pub fn get_percent(&self) -> f32 {
@@ -53,17 +64,11 @@ impl CouponBox {
     }
 
     pub fn create_coupon(&self, id:u64) {
-        let coupon = Coupon::new(id, self.percent);
+        let coupon = Coupon::new(id, 1, self.percent);
         println!("Create Coupon {:?}", coupon);
         let mut locked_list = self.list.lock().unwrap();
         locked_list.push(coupon);
         
     }
 
-}
-
-impl Drop for CouponBox {
-    fn drop(&mut self) {
-
-    }
 }

@@ -1,12 +1,25 @@
 use std::{sync::{Arc, Mutex}, thread::{self}};
 
-use system::CouponBox;
-
+use system::*;
 
 mod system;
 
 fn main() {
     println!("Start..");
+
+
+    let repo = MemoryRepository::<Coupon>::instance();
+    repo.create_coupon(1, 1);
+
+    let repo1 = MemoryRepository::<Coupon>::instance();
+    repo1.create_coupon(2, 1);
+
+    println!("총 개수 : {}", repo1.get_count());
+
+
+
+    /* 
+
 
     let coupon_box = Arc::new(CouponBox::new(0.1));
     let coupon_cnt = Arc::new(Mutex::new(0u64));
@@ -46,5 +59,6 @@ fn main() {
     }
 
     println!("Popped Coupon cnt : {}", *(coupon_cnt.lock().unwrap()));
+    */
     
 }
